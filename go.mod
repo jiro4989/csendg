@@ -1,4 +1,4 @@
-module github.com/jiro4989/cgml
+module github.com/jiro4989/csendg
 
 require (
 	golang.org/x/oauth2 v0.0.0-20181203162652-d668ce993890
