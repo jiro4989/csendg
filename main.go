@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -12,6 +13,8 @@ import (
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
+	"golang.org/x/text/encoding/japanese"
+	"golang.org/x/text/transform"
 	gmail "google.golang.org/api/gmail/v1"
 )
 
@@ -73,27 +76,29 @@ func main() {
 		log.Fatalf("Unable to retrieve gmail Client %v", err)
 	}
 
-	// r, err := srv.Users.Labels.List("me").Do()
-	// if err != nil {
-	// 	log.Fatalf("Unable to get labels. %v", err)
-	// }
-	//
-	// if len(r.Labels) > 0 {
-	// 	fmt.Print("Labels:\n")
-	// 	for _, l := range r.Labels {
-	// 		fmt.Printf("- %s\n", l.Name)
-	// 	}
-	// } else {
-	// 	fmt.Print("No label found.")
-	// }
-	//
-	temp := []byte("From: 'me'\r\n" +
-		"To: jiroron666@gmail.com\r\n" +
-		"Subject: TestSubject\r\n" +
-		"\r\n" + "TestBody")
+	args := os.Args
+	toAddr := args[1]
+	filePath := args[2]
+
+	mf, err := ReadMailFile(filePath)
+	if err != nil {
+		panic(err)
+	}
+
+	// Subjectの文字化けのため
+	msgStr := "From: 'me'\r\n" +
+		"To: " + toAddr + "\r\n" +
+		"Subject: " + mf.Title + "\r\n" +
+		"\r\n" + mf.Body
+
+	iso2022jpMsg, err := toISO2022JP(msgStr)
+	if err != nil {
+		panic(err)
+	}
+	msg := []byte(iso2022jpMsg)
 
 	var message gmail.Message
-	message.Raw = base64.StdEncoding.EncodeToString(temp)
+	message.Raw = base64.StdEncoding.EncodeToString(msg)
 	message.Raw = strings.Replace(message.Raw, "/", "_", -1)
 	message.Raw = strings.Replace(message.Raw, "+", "-", -1)
 	message.Raw = strings.Replace(message.Raw, "=", "", -1)
@@ -102,4 +107,49 @@ func main() {
 	if err != nil {
 		fmt.Printf("%v", err)
 	}
+}
+
+type MailFile struct {
+	FilePath, Title, Body string
+}
+
+func ReadMailFile(p string) (MailFile, error) {
+	f, err := os.Open(p)
+	if err != nil {
+		return MailFile{}, err
+	}
+	defer f.Close()
+
+	var (
+		ln    int
+		lines []string
+		mf    = MailFile{FilePath: p}
+		sc    = bufio.NewScanner(f)
+	)
+
+	for sc.Scan() {
+		line := sc.Text()
+		switch ln {
+		case 0:
+			mf.Title = line
+		case 1:
+			ln++
+			continue
+		default:
+			lines = append(lines, line)
+		}
+		ln++
+	}
+	if err := sc.Err(); err != nil {
+		return MailFile{}, err
+	}
+	mf.Body = strings.Join(lines, "\n")
+	return mf, nil
+}
+
+// Convert UTF-8 to ISO2022JP
+func toISO2022JP(str string) ([]byte, error) {
+	reader := strings.NewReader(str)
+	transformer := japanese.ISO2022JP.NewEncoder()
+	return ioutil.ReadAll(transform.NewReader(reader, transformer))
 }
