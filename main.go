@@ -8,9 +8,12 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/jiro4989/gohome"
+	"github.com/jiro4989/goosutil"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"golang.org/x/text/encoding/japanese"
@@ -28,16 +31,21 @@ type AppConfig struct {
 var (
 	configPaths = []string{
 		".csendg.json",
-		HomeDir() + "/.config/csendg/config.json",
 	}
 )
 
 var appConfig AppConfig
 
 func init() {
+	cd, err := gohome.GetConfigDir()
+	if err != nil {
+		panic(err)
+	}
+	configPaths = append(configPaths, filepath.Join(cd, "csendg/config.json"))
+
 	// 設定ファイルが存在したら読み込み
 	for _, p := range configPaths {
-		if Exists(p) {
+		if goosutil.Exists(p) {
 			b, err := ioutil.ReadFile(p)
 			if err != nil {
 				panic(err)

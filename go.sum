@@ -11,6 +11,10 @@ github.com/golang/protobuf v1.2.0 h1:P3YflyNX/ehuJFLhxviNdFxQPkGK5cDcApsge1SqnvM
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/google/go-cmp v0.2.0/go.mod h1:oXzfMopK8JAjlY9xF4vHSVASa0yLyX7SntLO5aqRK0M=
 github.com/grpc-ecosystem/grpc-gateway v1.5.0/go.mod h1:RSKVYQBd5MCa4OVpNdGskqpgL2+G+NZTnrVHpWWfpdw=
+github.com/jiro4989/gohome v0.0.0-20190105113238-daf3eb55d2ec h1:b16yg3+m/10x6oIBwXxVattWS7Op3Ibei0YNa+pGRHU=
+github.com/jiro4989/gohome v0.0.0-20190105113238-daf3eb55d2ec/go.mod h1:gbvwTsqlKRRmzIvjFYmE8tiuBkilKOxouVj8ReIb2TI=
+github.com/jiro4989/goosutil v1.0.0 h1:PvhS85ChGn77VG7i5pMm+5e6LI7ZII2IRgiWkfytkLI=
+github.com/jiro4989/goosutil v1.0.0/go.mod h1:3T4F90d/gfd7AIqPdjoERNqDKdlcq7LTaz9dm+gMtr0=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
 github.com/openzipkin/zipkin-go v0.1.1/go.mod h1:NtoC/o8u3JlF1lSlyPNswIbeQH9bJTmOf0Erfk+hxe8=

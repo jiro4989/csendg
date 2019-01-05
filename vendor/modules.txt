@@ -2,6 +2,10 @@
 cloud.google.com/go/compute/metadata
 # github.com/golang/protobuf v1.2.0
 github.com/golang/protobuf/proto
+# github.com/jiro4989/gohome v0.0.0-20190105113238-daf3eb55d2ec
+github.com/jiro4989/gohome
+# github.com/jiro4989/goosutil v1.0.0
+github.com/jiro4989/goosutil
 # golang.org/x/net v0.0.0-20181106065722-10aee1819953
 golang.org/x/net/context/ctxhttp
 golang.org/x/net/context
